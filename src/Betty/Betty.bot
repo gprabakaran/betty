@@ -1,0 +1,18 @@
+{
+    "name": "Betty",
+    "description": "",
+    "services": [
+        {
+            "type": "endpoint",
+            "name": "Development",
+            "appId": "",
+            "appPassword": "",
+            "endpoint": "https://localhost:44325/api/messages",
+            "id": "86"
+        }
+    ],
+    "padlock": "RKnYSWoKO3WgRiEc1X+8gQ==!ItUJOH0OqVmGMA3Lxq0mTNWuDKDjjtCX+icr8H1BVFa3yzV2nqWXIW9KFgRhDtxL",
+    "version": "2.0",
+    "overrides": null,
+    "path": "D:\\projects\\betty\\src\\Betty\\Betty.bot"
+}

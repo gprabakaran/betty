@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <CodeAnalysisRuleSet>BasicBot.ruleset</CodeAnalysisRuleSet>
+    <UserSecretsId>a8a4532e-2797-4edf-9c7e-d022f1c95ce4</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

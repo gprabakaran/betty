@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -59,8 +60,8 @@ namespace Betty
         {
             var logger = LoggerFactory.CreateLogger<BettyBot>();
 
-            var secretKey = Configuration["botFileSecret"];
-            var configFilePath = Configuration["botFilePath"];
+            var secretKey = Configuration["BotConfigurationSecret"];
+            var configFilePath = Path.Combine(HostingEnvironment.ContentRootPath, Configuration["BotConfigurationFile"]);
 
             var botConfiguration = BotConfiguration.Load(configFilePath, secretKey);
             services.AddSingleton(botConfiguration);
