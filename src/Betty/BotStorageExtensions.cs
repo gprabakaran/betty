@@ -36,7 +36,7 @@ namespace Betty
         {
             IStorage botStorage = null;
 
-            var storageService = botConfiguration.GetRequiredService<BlobStorageService>(
+            var storageService = botConfiguration.GetService<BlobStorageService>(
                 hostingEnvironment.EnvironmentName, "storage");
 
             if (storageService == null)

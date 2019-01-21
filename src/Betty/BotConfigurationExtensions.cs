@@ -1,8 +1,8 @@
-﻿using Microsoft.Bot.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Bot.Configuration;
 
 namespace Betty
 {
@@ -35,15 +35,44 @@ namespace Betty
         public static T GetRequiredService<T>(this BotConfiguration configuration, string environment, string name)
             where T : ConnectedService
         {
-            var serviceName = BuildServiceName(environment, name);
-            var serviceType = TranslateServiceType(typeof(T));
-
-            var serviceInstance = (T)configuration.Services.FirstOrDefault(x => x.Type == serviceName && x.Name == serviceName);
+            var serviceInstance = GetService<T>(configuration, environment, name);
 
             if (serviceInstance == null)
             {
-                throw new KeyNotFoundException($"Could not find service with name {serviceName}");
+                throw new KeyNotFoundException($"Could not find service with name {name} for environment {environment}");
             }
+
+            return serviceInstance;
+        }
+
+        /// <summary>
+        /// Finds a service in the bot configuration.
+        /// </summary>
+        /// <typeparam name="T">Type of service to locate.</typeparam>
+        /// <param name="configuration">Configuration to load from.</param>
+        /// <param name="environment">Environment the bot is hosted.</param>
+        /// <returns>Returns the located service instance.</returns>
+        public static T GetService<T>(this BotConfiguration configuration, string environment)
+            where T : ConnectedService
+        {
+            return GetService<T>(configuration,environment,null);
+        }
+
+        /// <summary>
+        /// Finds a service in the bot configuration.
+        /// </summary>
+        /// <typeparam name="T">Type of service to locate.</typeparam>
+        /// <param name="configuration">Configuration to load from.</param>
+        /// <param name="environment">Environment the bot is hosted.</param>
+        /// <param name="name">Name of the service (optional).</param>
+        /// <returns>Returns the located service instance.</returns>
+        public static T GetService<T>(this BotConfiguration configuration, string environment, string name)
+            where T : ConnectedService
+        {
+            var serviceName = BuildServiceName(environment, name);
+            var serviceType = TranslateServiceType(typeof(T));
+
+            var serviceInstance = (T)configuration.Services.FirstOrDefault(x => x.Type == serviceType && x.Name == serviceName);
 
             return serviceInstance;
         }
