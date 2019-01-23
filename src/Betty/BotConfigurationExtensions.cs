@@ -55,7 +55,7 @@ namespace Betty
         public static T GetService<T>(this BotConfiguration configuration, string environment)
             where T : ConnectedService
         {
-            return GetService<T>(configuration,environment,null);
+            return GetService<T>(configuration, environment, null);
         }
 
         /// <summary>
