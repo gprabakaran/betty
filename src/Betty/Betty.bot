@@ -7,8 +7,8 @@
             "name": "Development",
             "appId": "",
             "appPassword": "",
-            "endpoint": "https://localhost:44325/api/messages",
-            "id": "86"
+            "endpoint": "http://localhost:20168/api/messages",
+            "id": "61"
         }
     ],
     "padlock": "RKnYSWoKO3WgRiEc1X+8gQ==!ItUJOH0OqVmGMA3Lxq0mTNWuDKDjjtCX+icr8H1BVFa3yzV2nqWXIW9KFgRhDtxL",

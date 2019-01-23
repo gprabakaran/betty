@@ -17,9 +17,9 @@ namespace Betty
         /// <param name="turnContext">Context information for the turn.</param>
         /// <param name="cancellationToken">Cancellation token used to stop processing.</param>
         /// <returns>Returns an awaitable task.</returns>
-        public Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new NotImplementedException();
+            await turnContext.SendActivityAsync("Hello, I'm Betty!");
         }
     }
 }
