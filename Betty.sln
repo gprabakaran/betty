@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28315.86
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{402A243A-EA0E-450D-BF7A-452FB6CCCF7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Betty", "src\Betty\Betty.csproj", "{F2979EA0-3D85-4F0F-821F-E4E3F2A4CFA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Betty", "src\Betty\Betty.csproj", "{F2979EA0-3D85-4F0F-821F-E4E3F2A4CFA8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2124CB46-B150-4A45-9F79-943B46B80DBF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{CBDDCE55-7BED-49B9-83EA-9653AEDD81D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Betty.Tests", "test\Betty.Tests\Betty.Tests.csproj", "{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Betty.Tests", "test\Betty.Tests\Betty.Tests.csproj", "{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,9 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F2979EA0-3D85-4F0F-821F-E4E3F2A4CFA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -36,21 +33,27 @@ Global
 		{F2979EA0-3D85-4F0F-821F-E4E3F2A4CFA8}.Release|x64.Build.0 = Release|Any CPU
 		{F2979EA0-3D85-4F0F-821F-E4E3F2A4CFA8}.Release|x86.ActiveCfg = Release|Any CPU
 		{F2979EA0-3D85-4F0F-821F-E4E3F2A4CFA8}.Release|x86.Build.0 = Release|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Debug|x64.Build.0 = Debug|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Debug|x86.Build.0 = Debug|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Release|x64.ActiveCfg = Release|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Release|x64.Build.0 = Release|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Release|x86.ActiveCfg = Release|Any CPU
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE}.Release|x86.Build.0 = Release|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Debug|x64.Build.0 = Debug|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Debug|x86.Build.0 = Debug|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Release|x64.ActiveCfg = Release|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Release|x64.Build.0 = Release|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Release|x86.ActiveCfg = Release|Any CPU
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F2979EA0-3D85-4F0F-821F-E4E3F2A4CFA8} = {402A243A-EA0E-450D-BF7A-452FB6CCCF7B}
-		{CB2F83E5-1225-44E1-96A5-4CFE0C1010FE} = {2124CB46-B150-4A45-9F79-943B46B80DBF}
+		{94B107F0-59CE-4B2F-9ACF-4E2952C182C5} = {CBDDCE55-7BED-49B9-83EA-9653AEDD81D1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8CB58768-E095-4DB9-978F-6529E3284B03}
 	EndGlobalSection
 EndGlobal
