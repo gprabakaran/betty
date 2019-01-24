@@ -3,21 +3,32 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
-    entry: './src/index.ts',
+    entry: './src/index.js',
+    devtool: 'eval-source-map',
     module: {
         rules: [
             {
-                test: /\.ts$/,
-                use: 'ts-loader',
+                test: /\.js$/,
+                use: 'babel-loader',
                 exclude: [
-                    /node_modules/,
-                    /webpack.*/
+                    /node_modules/
                 ]
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /phaser\-input.js$/,
+                use: ['exports-loader?PhaserInput=PhaserInput']
             }
         ]
     },
     resolve: {
-        extensions: [ '.ts', '.js']
+        extensions: ['.js'],
+        alias: {
+            'phaser-input': path.join(__dirname, 'node_modules/@orange-games/phaser-input/build/phaser-input.js')
+        }
     },
     output: {
         filename: 'frontend.js',
