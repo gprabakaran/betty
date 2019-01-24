@@ -74,12 +74,12 @@ namespace Betty
 
                     if (topIntent == "checkin")
                     {
-                        return await stepContext.ReplaceDialogAsync(DialogNames.CheckinDialog);
+                        return await stepContext.BeginDialogAsync(DialogNames.CheckinDialog);
                     }
 
                     if (topIntent == "none")
                     {
-                        return await stepContext.ReplaceDialogAsync(DialogNames.FaqDialog);
+                        return await stepContext.BeginDialogAsync(DialogNames.FaqDialog);
                     }
 
                     return await stepContext.ReplaceDialogAsync(DialogNames.MainMenuDialog);
