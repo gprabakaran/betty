@@ -15,14 +15,19 @@ namespace Betty
     public class BettyBot : IBot
     {
         private readonly BotDialogs _dialogs;
+        private readonly ConversationState _conversationState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BettyBot"/> class.
         /// </summary>
         /// <param name="conversationState">The conversation state for the bot.</param>
-        public BettyBot(ConversationState conversationState)
+        /// <param name="botServices">Bot services to use.</param>
+        public BettyBot(ConversationState conversationState, BotServices botServices)
         {
-            _dialogs = new BotDialogs(conversationState.CreateProperty<DialogState>(nameof(DialogState)));
+            var dialogStateProperty = conversationState.CreateProperty<DialogState>(nameof(DialogState));
+
+            _dialogs = new BotDialogs(dialogStateProperty, botServices);
+            _conversationState = conversationState;
         }
 
         /// <summary>
@@ -55,6 +60,8 @@ namespace Betty
                     await dialogContext.BeginDialogAsync(DialogNames.RootDialog);
                 }
             }
+
+            await _conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
         }
     }
 }

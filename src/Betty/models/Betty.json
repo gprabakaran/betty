@@ -1,0 +1,112 @@
+{
+  "intents": [
+    {
+      "name": "escalate"
+    },
+    {
+      "name": "checkin"
+    },
+    {
+      "name": "confirm"
+    },
+    {
+      "name": "decline"
+    }
+  ],
+  "entities": [],
+  "composites": [],
+  "closedLists": [],
+  "regex_entities": [],
+  "model_features": [],
+  "regex_features": [],
+  "utterances": [
+    {
+      "text": "Please give me your manager",
+      "intent": "escalate",
+      "entities": []
+    },
+    {
+      "text": "Go get me Ian or Al, I'm done with this",
+      "intent": "escalate",
+      "entities": []
+    },
+    {
+      "text": "Redirect me to someone that can help",
+      "intent": "escalate",
+      "entities": []
+    },
+    {
+      "text": "Go get some help",
+      "intent": "escalate",
+      "entities": []
+    },
+    {
+      "text": "I'd like to checkin my luggage",
+      "intent": "checkin",
+      "entities": []
+    },
+    {
+      "text": "Can I give you my luggage?",
+      "intent": "checkin",
+      "entities": []
+    },
+    {
+      "text": "Please help me checkin my luggage if you can",
+      "intent": "checkin",
+      "entities": []
+    },
+    {
+      "text": "I'd like to dump my bags with you and get on board asap",
+      "intent": "checkin",
+      "entities": []
+    },
+    {
+      "text": "Yup",
+      "intent": "confirm",
+      "entities": []
+    },
+    {
+      "text": "Yes",
+      "intent": "confirm",
+      "entities": []
+    },
+    {
+      "text": "That's right",
+      "intent": "confirm",
+      "entities": []
+    },
+    {
+      "text": "No",
+      "intent": "decline",
+      "entities": []
+    },
+    {
+      "text": "No, thanks",
+      "intent": "decline",
+      "entities": []
+    },
+    {
+      "text": "No, please don't",
+      "intent": "decline",
+      "entities": []
+    },
+    {
+      "text": "Please don't",
+      "intent": "decline",
+      "entities": []
+    },
+    {
+      "text": "No, I didn't",
+      "intent": "decline",
+      "entities": []
+    }
+  ],
+  "patterns": [],
+  "patternAnyEntities": [],
+  "prebuiltEntities": [],
+  "luis_schema_version": "3.0.0",
+  "versionId": "0.2",
+  "name": "Betty",
+  "desc": "",
+  "culture": "en-us"
+}

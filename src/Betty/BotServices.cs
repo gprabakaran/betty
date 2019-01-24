@@ -51,6 +51,16 @@ namespace Betty
         public Dictionary<string, QnAMaker> Knowledgebases { get; } = new Dictionary<string, QnAMaker>();
 
         /// <summary>
+        /// Gets an intent recognizer based on the current environment and name.
+        /// </summary>
+        /// <param name="key">The name of the LUIS model.</param>
+        /// <returns>Returns the found model.</returns>
+        public LuisRecognizer GetRecognizer(string key)
+        {
+            return IntentRecognizers[$"{_hostingEnvironment.EnvironmentName}-{key}"];
+        }
+
+        /// <summary>
         /// Registers a new knowledge base instance.
         /// </summary>
         /// <param name="service">Service instance to register.</param>

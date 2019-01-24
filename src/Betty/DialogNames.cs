@@ -14,5 +14,20 @@ namespace Betty
         /// The root dialog.
         /// </summary>
         public const string RootDialog = "root";
+
+        /// <summary>
+        /// The menu dialog.
+        /// </summary>
+        public const string MainMenuDialog = "menu";
+
+        /// <summary>
+        /// FAQ dialog.
+        /// </summary>
+        public const string FaqDialog = "faq";
+
+        /// <summary>
+        /// Check-in dialog.
+        /// </summary>
+        public const string CheckinDialog = "checkin";
     }
 }
