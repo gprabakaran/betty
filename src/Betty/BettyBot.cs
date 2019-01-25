@@ -32,9 +32,9 @@ namespace Betty
             _conversationDataProperty = conversationState.CreateProperty<ConversationData>(nameof(ConversationData));
 
             _dialogs = new BotDialogs(
-                dialogStateProperty, 
-                _conversationDataProperty, 
-                botServices, 
+                dialogStateProperty,
+                _conversationDataProperty,
+                botServices,
                 scale);
 
             _conversationState = conversationState;
@@ -52,8 +52,6 @@ namespace Betty
             var activity = turnContext.Activity;
             var dialogContext = await _dialogs.CreateContextAsync(turnContext, cancellationToken);
 
-            var knowledgebase = _botServices.GetKnowledgebase("qna");
-
             if (activity.Type == ActivityTypes.ConversationUpdate)
             {
                 // Start the root dialog when the user joins the conversation.
@@ -64,44 +62,110 @@ namespace Betty
             }
             else if (turnContext.Activity.Type == ActivityTypes.Message)
             {
-                var knowledgebaseOptions = new QnAMakerOptions
+                var redirectedToManager = await HandleEscalationProtocol(turnContext, dialogContext, cancellationToken);
+
+                if (!redirectedToManager)
                 {
-                    ScoreThreshold = 0.7f,
-                    Top = 3,
-                };
+                    var handledWithKnowledgeBase = await HandleWithKnowledgeBase(turnContext, cancellationToken);
 
-                var answers = await knowledgebase.GetAnswersAsync(turnContext, knowledgebaseOptions);
-
-                if (answers != null && answers.Length > 0)
-                {
-                    await turnContext.SendActivityAsync(answers[0].Answer);
-
-                    var conversationData = await _conversationDataProperty.GetAsync(
-                        turnContext,
-                        () => new ConversationData(),
-                        cancellationToken);
-
-                    conversationData.ReturningCustomer = true;
-
-                    await _conversationDataProperty.SetAsync(
-                        turnContext,
-                        conversationData,
-                        cancellationToken);
-                }
-                else
-                {
-                    await dialogContext.ContinueDialogAsync(cancellationToken);
-
-                    // When the dialog tree is finished and has no state, we're not going to get an answer
-                    // from the dialog. There isn't a good way to resolve this problem, so restart with the root dialog.
-                    if (!turnContext.Responded)
+                    if (!handledWithKnowledgeBase)
                     {
-                        await dialogContext.BeginDialogAsync(DialogNames.RootDialog);
+                        await HandleWithDialog(turnContext, dialogContext, cancellationToken);
                     }
                 }
             }
 
             await _conversationState.SaveChangesAsync(turnContext, cancellationToken: cancellationToken);
+        }
+
+        /// <summary>
+        /// Handles the escalation intent through LUIS.
+        /// </summary>
+        /// <param name="turnContext">Turn context for the bot.</param>
+        /// <param name="dialogContext">Dialog context for the bot.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Returns true when escalated to manager; Otherwise false.</returns>
+        private async Task<bool> HandleEscalationProtocol(
+            ITurnContext turnContext, 
+            DialogContext dialogContext, 
+            CancellationToken cancellationToken)
+        {
+            var intentRecognizer = _botServices.GetRecognizer("luis");
+            var intents = await intentRecognizer.RecognizeAsync(turnContext, cancellationToken);
+            var topIntent = intents.GetTopScoringIntent();
+
+            // Detect whether the user wants to escalate the conversation to a manager.
+            // This is where we provide an escape from the regular route.
+            if (topIntent.intent == "escalate" && topIntent.score >= 0.7)
+            {
+                await turnContext.SendActivityAsync(
+                    "Euhm, okay, but Al is not around to help right now. " +
+                    "You can write down your complaint and dump it in the idea box over here.");
+
+                await dialogContext.CancelAllDialogsAsync(cancellationToken);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Handles the incoming message through the knowledge base.
+        /// </summary>
+        /// <param name="turnContext">Turn context for the bot.</param>
+        /// <param name="cancellationToken">Cancellation token for the bot.</param>
+        /// <returns>Returns true when the knowledge base was used to answer; Otherwise false.</returns>
+        private async Task<bool> HandleWithKnowledgeBase(ITurnContext turnContext, CancellationToken cancellationToken)
+        {
+            var knowledgebase = _botServices.GetKnowledgebase("qna");
+            var knowledgebaseOptions = new QnAMakerOptions
+            {
+                ScoreThreshold = 0.7f,
+                Top = 1,
+            };
+
+            var answers = await knowledgebase.GetAnswersAsync(turnContext, knowledgebaseOptions);
+
+            if (answers != null && answers.Length > 0)
+            {
+                await turnContext.SendActivityAsync(answers[0].Answer);
+
+                var conversationData = await _conversationDataProperty.GetAsync(
+                    turnContext,
+                    () => new ConversationData(),
+                    cancellationToken);
+
+                conversationData.ReturningCustomer = true;
+
+                await _conversationDataProperty.SetAsync(
+                    turnContext,
+                    conversationData,
+                    cancellationToken);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Handles the incoming activity with a dialog.
+        /// </summary>
+        /// <param name="turnContext">Turn context for the bot.</param>
+        /// <param name="dialogContext">Dialog context for the bot.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Returns an awaitable task.</returns>
+        private async Task HandleWithDialog(ITurnContext turnContext, DialogContext dialogContext, CancellationToken cancellationToken)
+        {
+            await dialogContext.ContinueDialogAsync(cancellationToken);
+
+            // When the dialog tree is finished and has no state, we're not going to get an answer
+            // from the dialog. There isn't a good way to resolve this problem, so restart with the root dialog.
+            if (!turnContext.Responded)
+            {
+                await dialogContext.BeginDialogAsync(DialogNames.RootDialog);
+            }
         }
     }
 }
