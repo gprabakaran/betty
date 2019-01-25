@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.AI.QnA;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 
@@ -16,6 +17,8 @@ namespace Betty
     {
         private readonly BotDialogs _dialogs;
         private readonly ConversationState _conversationState;
+        private readonly BotServices _botServices;
+        private readonly IStatePropertyAccessor<ConversationData> _conversationDataProperty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BettyBot"/> class.
@@ -26,10 +29,16 @@ namespace Betty
         public BettyBot(ConversationState conversationState, BotServices botServices, ILuggageScale scale)
         {
             var dialogStateProperty = conversationState.CreateProperty<DialogState>(nameof(DialogState));
-            var conversationDataProperty = conversationState.CreateProperty<ConversationData>(nameof(ConversationData));
+            _conversationDataProperty = conversationState.CreateProperty<ConversationData>(nameof(ConversationData));
 
-            _dialogs = new BotDialogs(dialogStateProperty, conversationDataProperty, botServices, scale);
+            _dialogs = new BotDialogs(
+                dialogStateProperty, 
+                _conversationDataProperty, 
+                botServices, 
+                scale);
+
             _conversationState = conversationState;
+            _botServices = botServices;
         }
 
         /// <summary>
@@ -43,6 +52,8 @@ namespace Betty
             var activity = turnContext.Activity;
             var dialogContext = await _dialogs.CreateContextAsync(turnContext, cancellationToken);
 
+            var knowledgebase = _botServices.GetKnowledgebase("qna");
+
             if (activity.Type == ActivityTypes.ConversationUpdate)
             {
                 // Start the root dialog when the user joins the conversation.
@@ -53,13 +64,40 @@ namespace Betty
             }
             else if (turnContext.Activity.Type == ActivityTypes.Message)
             {
-                await dialogContext.ContinueDialogAsync(cancellationToken);
-
-                // When the dialog tree is finished and has no state, we're not going to get an answer
-                // from the dialog. There isn't a good way to resolve this problem, so restart with the root dialog.
-                if (!turnContext.Responded)
+                var knowledgebaseOptions = new QnAMakerOptions
                 {
-                    await dialogContext.BeginDialogAsync(DialogNames.RootDialog);
+                    ScoreThreshold = 0.7f,
+                    Top = 3,
+                };
+
+                var answers = await knowledgebase.GetAnswersAsync(turnContext, knowledgebaseOptions);
+
+                if (answers != null && answers.Length > 0)
+                {
+                    await turnContext.SendActivityAsync(answers[0].Answer);
+
+                    var conversationData = await _conversationDataProperty.GetAsync(
+                        turnContext,
+                        () => new ConversationData(),
+                        cancellationToken);
+
+                    conversationData.ReturningCustomer = true;
+
+                    await _conversationDataProperty.SetAsync(
+                        turnContext,
+                        conversationData,
+                        cancellationToken);
+                }
+                else
+                {
+                    await dialogContext.ContinueDialogAsync(cancellationToken);
+
+                    // When the dialog tree is finished and has no state, we're not going to get an answer
+                    // from the dialog. There isn't a good way to resolve this problem, so restart with the root dialog.
+                    if (!turnContext.Responded)
+                    {
+                        await dialogContext.BeginDialogAsync(DialogNames.RootDialog);
+                    }
                 }
             }
 

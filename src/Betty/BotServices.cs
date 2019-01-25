@@ -61,6 +61,16 @@ namespace Betty
         }
 
         /// <summary>
+        /// Gets a knowledge base based on the current environment and name.
+        /// </summary>
+        /// <param name="key">The name of the knowledge base.</param>
+        /// <returns>Returns the found knowledge base.</returns>
+        public QnAMaker GetKnowledgebase(string key)
+        {
+            return Knowledgebases[$"{_hostingEnvironment.EnvironmentName}-{key}"];
+        }
+
+        /// <summary>
         /// Registers a new knowledge base instance.
         /// </summary>
         /// <param name="service">Service instance to register.</param>
@@ -70,11 +80,11 @@ namespace Betty
 
             var endpoint = new QnAMakerEndpoint
             {
-                EndpointKey = qnaMakerService.SubscriptionKey,
+                EndpointKey = qnaMakerService.EndpointKey,
                 Host = qnaMakerService.Hostname,
                 KnowledgeBaseId = qnaMakerService.KbId,
             };
-
+            
             var qna = new QnAMaker(endpoint);
 
             Knowledgebases.Add(qnaMakerService.Name, qna);
