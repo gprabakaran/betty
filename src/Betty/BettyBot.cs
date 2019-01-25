@@ -26,8 +26,9 @@ namespace Betty
         public BettyBot(ConversationState conversationState, BotServices botServices, ILuggageScale scale)
         {
             var dialogStateProperty = conversationState.CreateProperty<DialogState>(nameof(DialogState));
+            var conversationDataProperty = conversationState.CreateProperty<ConversationData>(nameof(ConversationData));
 
-            _dialogs = new BotDialogs(dialogStateProperty, botServices, scale);
+            _dialogs = new BotDialogs(dialogStateProperty, conversationDataProperty, botServices, scale);
             _conversationState = conversationState;
         }
 

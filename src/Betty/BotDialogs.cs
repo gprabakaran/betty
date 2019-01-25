@@ -12,17 +12,24 @@ namespace Betty
     public class BotDialogs : DialogSet
     {
         private readonly BotServices _botServices;
+        private readonly IStatePropertyAccessor<ConversationData> _conversationData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BotDialogs"/> class.
         /// </summary>
         /// <param name="dialogState">The dialog state to use.</param>
+        /// <param name="conversationData">The conversation data.</param>
         /// <param name="botServices">Bot services needed by the dialogs.</param>
         /// <param name="scale">The luggage scale.</param>
-        public BotDialogs(IStatePropertyAccessor<DialogState> dialogState, BotServices botServices, ILuggageScale scale)
+        public BotDialogs(
+            IStatePropertyAccessor<DialogState> dialogState,
+            IStatePropertyAccessor<ConversationData> conversationData,
+            BotServices botServices, 
+            ILuggageScale scale)
             : base(dialogState)
         {
             _botServices = botServices;
+            _conversationData = conversationData;
 
             Add(CreateRootDialog());
             Add(CreateMenuDialog());
@@ -69,10 +76,22 @@ namespace Betty
             {
                 async (stepContext, cancellationToken) =>
                 {
+                    var data = await _conversationData.GetAsync(
+                        stepContext.Context,
+                        () => new ConversationData(),
+                        cancellationToken);
+
                     var promptOptions = new PromptOptions
                     {
-                        Prompt = MessageFactory.Text("How can I help you today?"),
+                        Prompt = MessageFactory.Text(data.ReturningCustomer ?
+                        "Is there anything else I can help you with?" :
+                        "How can I help you today?"),
                     };
+
+                    // Flag the customer so that we know he/she was here before.
+                    // Store the result in the conversation state property.
+                    data.ReturningCustomer = true;
+                    await _conversationData.SetAsync(stepContext.Context, data);
 
                     return await stepContext.PromptAsync(PromptNames.MenuItem, promptOptions);
                 },
@@ -93,6 +112,10 @@ namespace Betty
                         return await stepContext.BeginDialogAsync(DialogNames.FaqDialog);
                     }
 
+                    return await stepContext.ReplaceDialogAsync(DialogNames.MainMenuDialog);
+                },
+                async (stepContext, cancellationToken) =>
+                {
                     return await stepContext.ReplaceDialogAsync(DialogNames.MainMenuDialog);
                 },
             };
@@ -281,7 +304,7 @@ namespace Betty
                     await stepContext.Context.SendActivityAsync(receiptMessage);
                     await stepContext.Context.SendActivityAsync("Have a pleasant security check!");
 
-                    return await stepContext.CancelAllDialogsAsync();
+                    return await stepContext.EndDialogAsync();
                 },
             };
 
