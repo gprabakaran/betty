@@ -22,11 +22,12 @@ namespace Betty
         /// </summary>
         /// <param name="conversationState">The conversation state for the bot.</param>
         /// <param name="botServices">Bot services to use.</param>
-        public BettyBot(ConversationState conversationState, BotServices botServices)
+        /// <param name="scale">Scale to weigh the luggage.</param>
+        public BettyBot(ConversationState conversationState, BotServices botServices, ILuggageScale scale)
         {
             var dialogStateProperty = conversationState.CreateProperty<DialogState>(nameof(DialogState));
 
-            _dialogs = new BotDialogs(dialogStateProperty, botServices);
+            _dialogs = new BotDialogs(dialogStateProperty, botServices, scale);
             _conversationState = conversationState;
         }
 
@@ -54,7 +55,7 @@ namespace Betty
                 await dialogContext.ContinueDialogAsync(cancellationToken);
 
                 // When the dialog tree is finished and has no state, we're not going to get an answer
-                // from the dialog. There's not really a good way to resolve this problem, so restart with the root dialog.
+                // from the dialog. There isn't a good way to resolve this problem, so restart with the root dialog.
                 if (!turnContext.Responded)
                 {
                     await dialogContext.BeginDialogAsync(DialogNames.RootDialog);

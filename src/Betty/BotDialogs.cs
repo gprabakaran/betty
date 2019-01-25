@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Schema;
 
 namespace Betty
 {
@@ -16,15 +18,24 @@ namespace Betty
         /// </summary>
         /// <param name="dialogState">The dialog state to use.</param>
         /// <param name="botServices">Bot services needed by the dialogs.</param>
-        public BotDialogs(IStatePropertyAccessor<DialogState> dialogState, BotServices botServices)
+        /// <param name="scale">The luggage scale.</param>
+        public BotDialogs(IStatePropertyAccessor<DialogState> dialogState, BotServices botServices, ILuggageScale scale)
             : base(dialogState)
         {
             _botServices = botServices;
 
             Add(CreateRootDialog());
             Add(CreateMenuDialog());
+            Add(CreateCheckinDialog());
+            Add(CreateSecurityQuestionDialog());
+            Add(CreateHeavyLuggageCheckDialog(scale));
+            Add(CreateThanksDialog());
+            Add(CreatePaymentDialog());
+            Add(CreateExtendedSecurityCheckDialog());
 
             Add(new TextPrompt(PromptNames.MenuItem));
+            Add(new TextPrompt(PromptNames.SecurityQuestion));
+            Add(new TextPrompt(PromptNames.PaymentConfirmation));
         }
 
         /// <summary>
@@ -87,6 +98,194 @@ namespace Betty
             };
 
             return new WaterfallDialog(DialogNames.MainMenuDialog, steps);
+        }
+
+        /// <summary>
+        /// Creates the checkin dialog.
+        /// </summary>
+        /// <returns>Returns the dialog structure.</returns>
+        private Dialog CreateCheckinDialog()
+        {
+            var steps = new WaterfallStep[]
+            {
+                async (stepContext, cancellationToken) =>
+                {
+                    await stepContext.Context.SendActivityAsync("Can I have your passport and boarding pass please?");
+
+                    // TODO: allow user to upload two images of passport and boarding pass. Left out for demo purposes
+                    return await stepContext.BeginDialogAsync(DialogNames.SecurityQuestionDialog);
+                },
+            };
+
+            return new WaterfallDialog(DialogNames.CheckinDialog, steps);
+        }
+
+        /// <summary>
+        /// Creates the dialog for asking the most important question of the check-in process.
+        /// </summary>
+        /// <returns>Returns the dialog structure.</returns>
+        private Dialog CreateSecurityQuestionDialog()
+        {
+            var steps = new WaterfallStep[]
+            {
+                async (stepContext, cancellationToken) =>
+                {
+                    var promptOptions = new PromptOptions
+                    {
+                        Prompt = MessageFactory.Text("Did you pack this luggage yourself?"),
+                    };
+
+                    return await stepContext.PromptAsync(PromptNames.SecurityQuestion, promptOptions);
+                },
+                async (stepContext, cancellationToken) =>
+                {
+                    var securityAnswer = stepContext.Result.ToString();
+                    var intents = await _botServices.GetRecognizer("luis").RecognizeAsync(stepContext.Context, cancellationToken);
+                    var topIntent = intents.GetTopScoringIntent().intent.ToLower();
+
+                    if (topIntent == "confirm")
+                    {
+                        return await stepContext.ReplaceDialogAsync(
+                            DialogNames.CheckHeavyLuggageDialog);
+                    }
+                    else if (topIntent == "decline")
+                    {
+                        return await stepContext.ReplaceDialogAsync(
+                            DialogNames.ExtendedSecurityCheckDialog);
+                    }
+                    else
+                    {
+                        // Restart the dialog when the answer is not satisfactory.
+                        return await stepContext.ReplaceDialogAsync(
+                            DialogNames.SecurityQuestionDialog,
+                            cancellationToken: cancellationToken);
+                    }
+                },
+            };
+
+            return new WaterfallDialog(DialogNames.SecurityQuestionDialog, steps);
+        }
+
+        /// <summary>
+        /// Creates a dialog to check the weight of the placed luggage.
+        /// </summary>
+        /// <returns>Returns the dialog structure.</returns>
+        private Dialog CreateHeavyLuggageCheckDialog(ILuggageScale scale)
+        {
+            var steps = new WaterfallStep[]
+            {
+                async (stepContext, cancellationToken) =>
+                {
+                    var weight = await scale.GetWeight();
+
+                    if (weight > 20.0)
+                    {
+                        return await stepContext.ReplaceDialogAsync(DialogNames.PaymentDialog);
+                    }
+                    else
+                    {
+                        return await stepContext.ReplaceDialogAsync(DialogNames.ThanksDialog);
+                    }
+                },
+            };
+
+            return new WaterfallDialog(DialogNames.CheckHeavyLuggageDialog, steps);
+        }
+
+        /// <summary>
+        /// Creates a dialog to thank the customer for their time.
+        /// </summary>
+        /// <returns>Returns the dialog structure.</returns>
+        private Dialog CreateThanksDialog()
+        {
+            var steps = new WaterfallStep[]
+            {
+                async (stepContext, cancellationToken) =>
+                {
+                    await stepContext.Context.SendActivityAsync("Thanks, have a pleasant flight!");
+                    return await stepContext.EndDialogAsync();
+                },
+            };
+
+            return new WaterfallDialog(DialogNames.ThanksDialog, steps);
+        }
+
+        private Dialog CreatePaymentDialog()
+        {
+            var steps = new WaterfallStep[]
+            {
+                async (stepContext, cancellationToken) =>
+                {
+                    var paymentCard = new HeroCard(
+                        title: "Additional payment requested",
+                        subtitle: "50 Intergallactic credits",
+                        text: "Extra heavy luggage");
+
+                    paymentCard.Buttons = new List<CardAction>
+                    {
+                        new CardAction("accept", "Okay"),
+                        new CardAction("decline", "No way!"),
+                    };
+
+                    var promptOptions = new PromptOptions
+                    {
+                        Prompt = (Activity)MessageFactory.Attachment(
+                            paymentCard.ToAttachment(),
+                            text: "Your suitcase is too heavy. We'll have to charge you 50 intergallactic credits. Is this okay?"),
+                    };
+
+                    return await stepContext.PromptAsync(PromptNames.PaymentConfirmation, promptOptions);
+                },
+                async (stepContext, cancellationToken) =>
+                {
+                    var confirmationData = stepContext.Result.ToString().ToLower();
+
+                    if(confirmationData != "confirm")
+                    {
+                        await stepContext.Context.SendActivityAsync("We're sorry to inform you that your luggage will be incinerated.");
+                    }
+
+                    return await stepContext.ReplaceDialogAsync(DialogNames.ThanksDialog);
+                },
+            };
+
+            return new WaterfallDialog(DialogNames.PaymentDialog, steps);
+        }
+
+        /// <summary>
+        /// Creates the extended security check dialog.
+        /// </summary>
+        /// <returns>Returns the dialog structure.</returns>
+        private Dialog CreateExtendedSecurityCheckDialog()
+        {
+            var steps = new WaterfallStep[]
+            {
+                async (stepContext, cancellationToken) =>
+                {
+                    var card = new ReceiptCard
+                    {
+                        Title = "Extended security check",
+                        Items = new List<ReceiptItem>
+                        {
+                            new ReceiptItem(title: "Luggage check", quantity: "1"),
+                            new ReceiptItem(title: "Extended personal security check", quantity: "1"),
+                        },
+                        Tax = "12 credits",
+                        Total = "75 credits",
+                    };
+
+                    var receiptMessage = MessageFactory.Attachment(
+                        card.ToAttachment(),
+                        "Okay, well, here's a receipt, please follow Al for an additional security check.");
+
+                    await stepContext.Context.SendActivityAsync(receiptMessage);
+                    await stepContext.Context.SendActivityAsync("Have a pleasant security check!");
+
+                    return await stepContext.CancelAllDialogsAsync();
+                },
+            };
+
+            return new WaterfallDialog(DialogNames.ExtendedSecurityCheckDialog, steps);
         }
     }
 }

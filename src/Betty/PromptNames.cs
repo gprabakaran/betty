@@ -13,6 +13,16 @@ namespace Betty
         /// <summary>
         /// A menu option from the main menu.
         /// </summary>
-        public const string MenuItem = "menuOption";
+        public const string MenuItem = "menuOptionPrompt";
+
+        /// <summary>
+        /// An answer to the security question.
+        /// </summary>
+        public const string SecurityQuestion = "securityQuestionPrompt";
+
+        /// <summary>
+        /// Payment confirmation.
+        /// </summary>
+        public const string PaymentConfirmation = "paymentConfirmationPrompt";
     }
 }

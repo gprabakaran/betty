@@ -60,10 +60,13 @@ namespace Betty
         {
             var logger = LoggerFactory.CreateLogger<BettyBot>();
 
+            services.AddScoped<ILuggageScale, LuggageScale>();
+
             var secretKey = Configuration["BotConfigurationSecret"];
             var configFilePath = Path.Combine(HostingEnvironment.ContentRootPath, Configuration["BotConfigurationFile"]);
 
             var botConfiguration = BotConfiguration.Load(configFilePath, secretKey);
+
             services.AddSingleton(botConfiguration);
 
             services.AddSingleton(serviceProvider => new BotServices(

@@ -1,0 +1,366 @@
+[
+  {
+    "type": "conversationUpdate",
+    "membersAdded": [
+      {
+        "id": "61",
+        "name": "Bot"
+      }
+    ],
+    "channelId": "emulator",
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "id": "7a424f50-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:39+01:00",
+    "recipient": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "timestamp": "2019-01-25T16:08:39.365Z",
+    "from": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "name": "User"
+    },
+    "locale": "",
+    "serviceUrl": "http://localhost:48136"
+  },
+  {
+    "type": "conversationUpdate",
+    "membersAdded": [
+      {
+        "id": "78255634-50a4-4077-a011-ce916c8cd103",
+        "name": "User"
+      }
+    ],
+    "channelId": "emulator",
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "id": "7a424f51-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:39+01:00",
+    "recipient": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "timestamp": "2019-01-25T16:08:39.365Z",
+    "from": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "name": "User"
+    },
+    "locale": "",
+    "serviceUrl": "http://localhost:48136"
+  },
+  {
+    "type": "message",
+    "serviceUrl": "http://localhost:48136",
+    "channelId": "emulator",
+    "from": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "recipient": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "role": "user"
+    },
+    "text": "Hello I'm Betty, welcome to improbable air. Your chance to get to the moon (or not, we're not sure yet).",
+    "inputHint": "acceptingInput",
+    "replyToId": "7a424f50-20bb-11e9-944a-ef115e4c7471",
+    "id": "7a9c0810-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:39+01:00",
+    "timestamp": "2019-01-25T16:08:39.953Z",
+    "locale": ""
+  },
+  {
+    "type": "message",
+    "serviceUrl": "http://localhost:48136",
+    "channelId": "emulator",
+    "from": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "recipient": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "role": "user"
+    },
+    "text": "How can I help you today?",
+    "inputHint": "acceptingInput",
+    "attachments": [],
+    "entities": [],
+    "replyToId": "7a424f50-20bb-11e9-944a-ef115e4c7471",
+    "id": "7ab423f0-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:40+01:00",
+    "timestamp": "2019-01-25T16:08:40.111Z",
+    "locale": ""
+  },
+  {
+    "type": "message",
+    "text": "I'd like to checkin my luggage.",
+    "from": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "name": "User"
+    },
+    "locale": "",
+    "textFormat": "plain",
+    "timestamp": "2019-01-25T16:08:45.320Z",
+    "channelData": {
+      "clientActivityId": "1548432519351.5772396039220908.0"
+    },
+    "entities": [
+      {
+        "type": "ClientCapabilities",
+        "requiresBotState": true,
+        "supportsTts": true,
+        "supportsListening": true
+      }
+    ],
+    "channelId": "emulator",
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "id": "7dcef880-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:45+01:00",
+    "recipient": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "serviceUrl": "http://localhost:48136"
+  },
+  {
+    "type": "trace",
+    "timestamp": "2019-01-25T16:08:45.775Z",
+    "serviceUrl": "http://localhost:48136",
+    "channelId": "emulator",
+    "from": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "recipient": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "role": "user"
+    },
+    "replyToId": "7dcef880-20bb-11e9-944a-ef115e4c7471",
+    "label": "Luis Trace",
+    "valueType": "https://www.luis.ai/schemas/trace",
+    "value": {
+      "recognizerResult": {
+        "text": "I'd like to checkin my luggage.",
+        "alteredText": null,
+        "intents": {
+          "checkin": {
+            "score": 0.973486245
+          }
+        },
+        "entities": {
+          "$instance": {}
+        }
+      },
+      "luisModel": {
+        "ModelID": "374f11d5-159d-4f80-956b-8c10da158513"
+      },
+      "luisOptions": {
+        "BingSpellCheckSubscriptionKey": null,
+        "IncludeAllIntents": null,
+        "IncludeInstanceData": null,
+        "Log": null,
+        "SpellCheck": null,
+        "Staging": null,
+        "TimezoneOffset": null
+      },
+      "luisResult": {
+        "query": "I'd like to checkin my luggage.",
+        "alteredQuery": null,
+        "topScoringIntent": {
+          "intent": "checkin",
+          "score": 0.973486245
+        },
+        "intents": null,
+        "entities": [],
+        "compositeEntities": null,
+        "sentimentAnalysis": null
+      }
+    },
+    "name": "LuisRecognizer",
+    "id": "7e1465f0-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:45+01:00",
+    "locale": ""
+  },
+  {
+    "type": "message",
+    "serviceUrl": "http://localhost:48136",
+    "channelId": "emulator",
+    "from": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "recipient": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "role": "user"
+    },
+    "text": "Can I have your passport and boarding pass please?",
+    "inputHint": "acceptingInput",
+    "replyToId": "7dcef880-20bb-11e9-944a-ef115e4c7471",
+    "id": "7e204cd0-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:45+01:00",
+    "timestamp": "2019-01-25T16:08:45.853Z",
+    "locale": ""
+  },
+  {
+    "type": "message",
+    "serviceUrl": "http://localhost:48136",
+    "channelId": "emulator",
+    "from": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "recipient": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "role": "user"
+    },
+    "text": "Did you pack this luggage yourself?",
+    "inputHint": "acceptingInput",
+    "attachments": [],
+    "entities": [],
+    "replyToId": "7dcef880-20bb-11e9-944a-ef115e4c7471",
+    "id": "7e2aad10-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:45+01:00",
+    "timestamp": "2019-01-25T16:08:45.921Z",
+    "locale": ""
+  },
+  {
+    "type": "message",
+    "text": "Yes",
+    "from": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "name": "User"
+    },
+    "locale": "",
+    "textFormat": "plain",
+    "timestamp": "2019-01-25T16:08:48.089Z",
+    "channelData": {
+      "clientActivityId": "1548432519351.5772396039220908.2"
+    },
+    "channelId": "emulator",
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "id": "7f757c90-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:48+01:00",
+    "recipient": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "serviceUrl": "http://localhost:48136"
+  },
+  {
+    "type": "trace",
+    "timestamp": "2019-01-25T16:08:48.228Z",
+    "serviceUrl": "http://localhost:48136",
+    "channelId": "emulator",
+    "from": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "recipient": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "role": "user"
+    },
+    "replyToId": "7f757c90-20bb-11e9-944a-ef115e4c7471",
+    "label": "Luis Trace",
+    "valueType": "https://www.luis.ai/schemas/trace",
+    "value": {
+      "recognizerResult": {
+        "text": "Yes",
+        "alteredText": null,
+        "intents": {
+          "confirm": {
+            "score": 0.9401284
+          }
+        },
+        "entities": {
+          "$instance": {}
+        }
+      },
+      "luisModel": {
+        "ModelID": "374f11d5-159d-4f80-956b-8c10da158513"
+      },
+      "luisOptions": {
+        "BingSpellCheckSubscriptionKey": null,
+        "IncludeAllIntents": null,
+        "IncludeInstanceData": null,
+        "Log": null,
+        "SpellCheck": null,
+        "Staging": null,
+        "TimezoneOffset": null
+      },
+      "luisResult": {
+        "query": "Yes",
+        "alteredQuery": null,
+        "topScoringIntent": {
+          "intent": "confirm",
+          "score": 0.9401284
+        },
+        "intents": null,
+        "entities": [],
+        "compositeEntities": null,
+        "sentimentAnalysis": null
+      }
+    },
+    "name": "LuisRecognizer",
+    "id": "7f8ab240-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:48+01:00",
+    "locale": ""
+  },
+  {
+    "type": "message",
+    "serviceUrl": "http://localhost:48136",
+    "channelId": "emulator",
+    "from": {
+      "id": "61",
+      "name": "Bot",
+      "role": "bot"
+    },
+    "conversation": {
+      "id": "7a3fb740-20bb-11e9-b166-9fcef064aeb6|livechat"
+    },
+    "recipient": {
+      "id": "78255634-50a4-4077-a011-ce916c8cd103",
+      "role": "user"
+    },
+    "text": "Thanks, have a pleasant flight!",
+    "inputHint": "acceptingInput",
+    "replyToId": "7f757c90-20bb-11e9-944a-ef115e4c7471",
+    "id": "7f967210-20bb-11e9-944a-ef115e4c7471",
+    "localTimestamp": "2019-01-25T17:08:48+01:00",
+    "timestamp": "2019-01-25T16:08:48.305Z",
+    "locale": ""
+  }
+]
