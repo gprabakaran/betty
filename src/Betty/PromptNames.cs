@@ -24,5 +24,10 @@ namespace Betty
         /// Payment confirmation.
         /// </summary>
         public const string PaymentConfirmation = "paymentConfirmationPrompt";
+
+        /// <summary>
+        /// Boarding information.
+        /// </summary>
+        public const string BoardingInformation = "boardingInformation";
     }
 }

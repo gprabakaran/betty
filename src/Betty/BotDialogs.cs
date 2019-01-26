@@ -43,6 +43,7 @@ namespace Betty
             Add(new TextPrompt(PromptNames.MenuItem));
             Add(new TextPrompt(PromptNames.SecurityQuestion));
             Add(new TextPrompt(PromptNames.PaymentConfirmation));
+            Add(new TextPrompt(PromptNames.BoardingInformation));
         }
 
         /// <summary>
@@ -107,11 +108,6 @@ namespace Betty
                         return await stepContext.BeginDialogAsync(DialogNames.CheckinDialog);
                     }
 
-                    if (topIntent == "none")
-                    {
-                        return await stepContext.BeginDialogAsync(DialogNames.FaqDialog);
-                    }
-
                     return await stepContext.ReplaceDialogAsync(DialogNames.MainMenuDialog);
                 },
                 async (stepContext, cancellationToken) =>
@@ -133,11 +129,23 @@ namespace Betty
             {
                 async (stepContext, cancellationToken) =>
                 {
-                    await stepContext.Context.SendActivityAsync("Can I have your passport and boarding pass please?");
+                    var suggestedActions = (Activity)MessageFactory.SuggestedActions(
+                        new [] { "Here's my boarding pass and passport."}, 
+                        "Can I have your passport and boarding pass please?");
 
-                    // TODO: allow user to upload two images of passport and boarding pass. Left out for demo purposes
-                    return await stepContext.BeginDialogAsync(DialogNames.SecurityQuestionDialog);
+                    var promptOptions = new PromptOptions
+                    {
+                        Prompt = suggestedActions,
+                    };
+
+                    return await stepContext.PromptAsync(PromptNames.BoardingInformation, promptOptions);
                 },
+                async (stepContext, cancellationToken) =>
+                {
+                    // Ignore the action submitted by the user. 
+                    // For demo purposes of course.
+                    return await stepContext.ReplaceDialogAsync(DialogNames.SecurityQuestionDialog);
+                }
             };
 
             return new WaterfallDialog(DialogNames.CheckinDialog, steps);
